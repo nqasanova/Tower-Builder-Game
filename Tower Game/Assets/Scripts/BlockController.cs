@@ -13,7 +13,7 @@ public class BlockController : MonoBehaviour
         if (!hasLanded && collision.gameObject.CompareTag("Ground"))
         {
             hasLanded = true;
-            // GameManager.Instance.AddScore(10); // Give points
+            GameManager.Instance.AddScore(10); 
         }
     }
 
@@ -26,20 +26,20 @@ public class BlockController : MonoBehaviour
     {
         isDragging = true;
         offset = transform.position - GetMouseWorldPos();
-        rb.isKinematic = true; // Disable physics while dragging
+        rb.isKinematic = true; 
     }
 
     void OnMouseUp()
     {
         isDragging = false;
-        rb.isKinematic = false; // Re-enable physics
+        rb.isKinematic = false;
     }
 
     void Update()
     {
-        if (transform.position.y < -5f) // Block fell off
+        if (transform.position.y < -5f) 
         {
-            // GameManager.Instance.GameOver();
+            GameManager.Instance.GameOver();
         }
     }
 
