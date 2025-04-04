@@ -42,17 +42,15 @@ public class BlockSpawner : MonoBehaviour
             movingRight = true;
     }
 
-    void DropBlock()
-    {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = Camera.main.WorldToScreenPoint(currentBlock.transform.position).z;
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+ void DropBlock()
+{
+    Rigidbody rb = currentBlock.GetComponent<Rigidbody>();
+    rb.isKinematic = false;
 
-        currentBlock.transform.position = new Vector3(worldPos.x, currentBlock.transform.position.y, currentBlock.transform.position.z);
+    //  Freeze all rotation so the block drops straight
+    rb.constraints = RigidbodyConstraints.FreezeRotation;
 
-        currentBlock.GetComponent<Rigidbody>().isKinematic = false;
-        
-        currentBlock = null; 
-        Invoke("SpawnBlock", 0.5f);
-    }
+    currentBlock = null;
+    Invoke("SpawnBlock", 0.5f);
+}
 }

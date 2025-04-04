@@ -39,7 +39,15 @@ public class BlockController : MonoBehaviour
     {
         if (transform.position.y < -5f) 
         {
-            GameManager.Instance.GameOver();
+            if (GameManager.Instance != null)
+{
+    GameManager.Instance.GameOver();
+}
+else
+{
+    Debug.LogWarning("GameManager.Instance is null!");
+}
+
         }
     }
 
