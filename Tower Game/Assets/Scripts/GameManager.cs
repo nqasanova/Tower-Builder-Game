@@ -19,17 +19,18 @@ public class GameManager : MonoBehaviour
         score += points;
         Debug.Log("Score: " + score);
     }
+    private bool gameOverTriggered = false;
 
     public void GameOver()
-{
-    Debug.Log("Game Over! Final Score: " + score);
+    {
+        if (gameOverTriggered) return;
+        gameOverTriggered = true;
 
-    // Break all joints to let the blocks fall naturally
-    BreakAllBlockJoints();
-
-    // Restart the game after a short delay
-    Invoke(nameof(RestartScene), 2f); // optional delay to let the fall play out
-}
+        Debug.Log("Game Over! Final Score: " + score);
+        AudioManager.Instance.PlayGameOver();
+        BreakAllBlockJoints();
+        Invoke(nameof(RestartScene), 2f);
+    }
 
     void Update()
     {
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
 
     void RestartScene()
     {
+        AudioManager.Instance.PlayBackgroundMusic();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -70,6 +72,18 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(joint);
             }
+        }
+    }
+
+    private int blocksOnGround = 0;
+
+    public void RegisterBlockHitGround()
+    {
+        blocksOnGround++;
+
+        if (blocksOnGround > 1)
+        {
+            GameOver();
         }
     }
 }

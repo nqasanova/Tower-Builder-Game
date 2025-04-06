@@ -14,6 +14,38 @@ public class BlockController : MonoBehaviour
         }
     }
 
+    // void OnCollisionEnter(Collision collision)
+    // {
+    //     if (!hasLanded && (collision.gameObject.CompareTag("Block") || collision.gameObject.CompareTag("Ground")))
+    //     {
+    //         hasLanded = true;
+
+    //         // Game Over if this block hits the ground and it's not the first block
+    //         if (collision.gameObject.CompareTag("Ground") && !isFirstBlock)
+    //         {
+    //             GameManager.Instance.GameOver();
+    //             return;
+    //         }
+
+    //         // Only add score if it lands on another block (not the ground)
+    //         if (collision.gameObject.CompareTag("Block"))
+    //         {
+    //             GameManager.Instance.AddScore(10);
+    //         }
+
+    //         // Stick this block to the one it collided with
+    //         Rigidbody otherRb = collision.rigidbody;
+    //         if (otherRb != null)
+    //         {
+    //             FixedJoint joint = gameObject.AddComponent<FixedJoint>();
+    //             joint.connectedBody = otherRb;
+    //         }
+
+    //         // Change tag to "Stuck" so it's part of the tower now
+    //         gameObject.tag = "Stuck";
+    //     }
+    // }
+
     void OnCollisionEnter(Collision collision)
     {
         if (!hasLanded && (collision.gameObject.CompareTag("Block") || collision.gameObject.CompareTag("Ground")))
@@ -21,19 +53,17 @@ public class BlockController : MonoBehaviour
             hasLanded = true;
 
             // Game Over if this block hits the ground and it's not the first block
-            if (collision.gameObject.CompareTag("Ground") && !isFirstBlock)
+            if (collision.gameObject.CompareTag("Ground"))
             {
-                GameManager.Instance.GameOver();
+                GameManager.Instance.RegisterBlockHitGround();
                 return;
             }
 
-            // Only add score if it lands on another block (not the ground)
             if (collision.gameObject.CompareTag("Block"))
             {
                 GameManager.Instance.AddScore(10);
             }
 
-            // Stick this block to the one it collided with
             Rigidbody otherRb = collision.rigidbody;
             if (otherRb != null)
             {
@@ -41,14 +71,13 @@ public class BlockController : MonoBehaviour
                 joint.connectedBody = otherRb;
             }
 
-            // Change tag to "Stuck" so it's part of the tower now
             gameObject.tag = "Stuck";
         }
     }
 
     void Update()
     {
-        if (transform.position.y < -5f)
+        if (!hasLanded && transform.position.y < -1f)
         {
             GameManager.Instance.GameOver();
         }
