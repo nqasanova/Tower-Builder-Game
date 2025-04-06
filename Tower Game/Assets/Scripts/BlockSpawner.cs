@@ -1,26 +1,43 @@
 using UnityEngine;
 
+[RequireComponent(typeof(LineRenderer))]
 public class BlockSpawner : MonoBehaviour
 {
     public GameObject blockPrefab;
     public float moveSpeed = 1.5f;
+    public Transform ropeAnchorPoint;  // The top anchor point where the rope is attached
+    public Material ropeMaterial;  // The rope texture material
 
     private GameObject currentBlock;
-    private bool movingRight = true;
-    private float lastSpawnHeight = 5f;  // The starting height for the first block.
+    private float lastSpawnHeight = 5f;
+    private LineRenderer lineRenderer;
 
     void Start()
     {
-        SpawnBlock();  // Spawn the first block.
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.positionCount = 2;
+        lineRenderer.enabled = false; // Hide rope until a block is spawned
+
+        // Assign the material to the LineRenderer
+        lineRenderer.material = ropeMaterial;
+
+        // Adjust the width of the rope
+        lineRenderer.startWidth = 0.1f; // Rope thickness at the start
+        lineRenderer.endWidth = 0.1f;   // Rope thickness at the end
+
+        SpawnBlock();
     }
 
     void Update()
     {
         if (currentBlock != null)
         {
-            MoveBlock();  // Move the current block back and forth.
+            MoveBlock();
 
-            if (Input.GetMouseButtonDown(0))  // If the player clicks, drop the block.
+            // Update the rope each frame
+            UpdateRope();
+
+            if (Input.GetMouseButtonDown(0))
             {
                 DropBlock();
             }
@@ -29,48 +46,63 @@ public class BlockSpawner : MonoBehaviour
 
     void SpawnBlock()
     {
-        // Get the spawn position, dynamically adjusting the height of the spawn point.
-        Vector3 spawnPos = new Vector3(Mathf.Round(Random.Range(-3f, 3f)), GetSpawnHeight(), 0);
+        Vector3 spawnPos = ropeAnchorPoint.position + new Vector3(0, -3f, 0);
         currentBlock = Instantiate(blockPrefab, spawnPos, Quaternion.identity);
-        currentBlock.GetComponent<Rigidbody>().isKinematic = true;  // Prevent physics from affecting it until dropped.
-        currentBlock.tag = "Untagged";  // Tag the block as "Untagged" initially so it isn't counted in the height calculation.
+
+        // Disable physics initially
+        Rigidbody rb = currentBlock.GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.useGravity = false;
+
+        currentBlock.tag = "Untagged";
+
+        lineRenderer.enabled = true;
     }
 
-    // This method calculates the height for spawning new blocks
     float GetSpawnHeight()
     {
-        // The spawn height is the highest Y value among the already spawned blocks
         return lastSpawnHeight;
     }
 
     void MoveBlock()
     {
-        // Move the current block back and forth between the left and right
-        float direction = movingRight ? 1f : -1f;
-        currentBlock.transform.position += Vector3.right * direction * moveSpeed * Time.deltaTime;
+        float swingAmplitude = 2f; // How far it swings side to side
+        float swingHeight = 0.5f;  // How much the height changes during swing
+        float swingSpeed = 2f;     // How fast it swings
 
-        // Change direction when the block reaches the boundaries
-        if (currentBlock.transform.position.x > 3f)
-            movingRight = false;
-        else if (currentBlock.transform.position.x < -3f)
-            movingRight = true;
+        float time = Time.time * swingSpeed;
+
+        float x = Mathf.Sin(time) * swingAmplitude;
+        float y = GetSpawnHeight() - Mathf.Cos(time) * swingHeight;
+
+        currentBlock.transform.position = new Vector3(x, y, 0);
     }
 
     void DropBlock()
     {
-        // Allow the block to interact with physics after it is dropped
-        currentBlock.GetComponent<Rigidbody>().isKinematic = false;
-        currentBlock.tag = "Block";  // Tag the block as "Block" so it will be part of the stack.
+        // Stop manual movement
+        Rigidbody rb = currentBlock.GetComponent<Rigidbody>();
+        rb.isKinematic = false;
+        rb.useGravity = true;
 
-        // Update the spawn height based on the current block's position
+        currentBlock.tag = "Block";
+
         lastSpawnHeight = currentBlock.transform.position.y + 1.2f;
 
-        // Clear the reference to the current block so a new one can be spawned
+        lineRenderer.enabled = false;
+
         currentBlock = null;
 
-        // Spawn a new block after a short delay
         Invoke("SpawnBlock", 0.5f);
-
         AudioManager.Instance.PlayBlockDrop();
+    }
+
+    void UpdateRope()
+    {
+        if (currentBlock != null)
+        {
+            lineRenderer.SetPosition(0, ropeAnchorPoint.position);
+            lineRenderer.SetPosition(1, currentBlock.transform.position + Vector3.up * 0.5f); // Top of the block
+        }
     }
 }
