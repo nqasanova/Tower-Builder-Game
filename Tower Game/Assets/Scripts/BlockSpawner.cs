@@ -70,5 +70,7 @@ public class BlockSpawner : MonoBehaviour
 
         // Spawn a new block after a short delay
         Invoke("SpawnBlock", 0.5f);
+
+        AudioManager.Instance.PlayBlockDrop();
     }
 }

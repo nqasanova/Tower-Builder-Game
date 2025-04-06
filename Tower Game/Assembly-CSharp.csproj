@@ -67,6 +67,7 @@
     <Compile Include="Assets/Scripts/BlockSpawner.cs" />
     <Compile Include="Assets/Scripts/GameManager.cs" />
     <Compile Include="Assets/Scripts/CameraFollow.cs" />
+    <Compile Include="Assets/Scripts/AudioManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
