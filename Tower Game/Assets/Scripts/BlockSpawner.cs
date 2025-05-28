@@ -11,6 +11,8 @@ public class BlockSpawner : MonoBehaviour
     private GameObject currentBlock;
     private float lastSpawnHeight = 5f;
     private LineRenderer lineRenderer;
+    private bool isFirstBlock = true;
+
 
     void Start()
     {
@@ -90,6 +92,12 @@ public class BlockSpawner : MonoBehaviour
         lastSpawnHeight = currentBlock.transform.position.y + 1.2f;
 
         lineRenderer.enabled = false;
+
+        if (isFirstBlock)
+        {
+            currentBlock.GetComponent<BlockController>().SetAsFirstBlock();
+            isFirstBlock = false;
+        }
 
         currentBlock = null;
 

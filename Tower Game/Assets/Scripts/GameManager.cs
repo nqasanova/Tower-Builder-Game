@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public int score = 0;
+    public TextMeshProUGUI scoreText;
+    
 
     void Awake()
     {
@@ -15,10 +18,12 @@ public class GameManager : MonoBehaviour
     }
 
     public void AddScore(int points)
-    {
-        score += points;
-        Debug.Log("Score: " + score);
-    }
+{
+    score += points;
+    Debug.Log("Score: " + score); // Optional: Keep for debug
+    if (scoreText != null)
+        scoreText.text = "Score: " + score;
+}
     private bool gameOverTriggered = false;
 
     public void GameOver()
@@ -60,6 +65,9 @@ public class GameManager : MonoBehaviour
     {
         AudioManager.Instance.PlayBackgroundMusic();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        score = 0;
+        if (scoreText != null)
+            scoreText.text = "Score: 0";
     }
 
     void BreakAllBlockJoints()
@@ -75,15 +83,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private int blocksOnGround = 0;
 
     public void RegisterBlockHitGround()
-    {
-        blocksOnGround++;
-
-        if (blocksOnGround > 1)
-        {
-            GameOver();
-        }
-    }
+{
+    GameOver();  // Immediately ends the game if a non-first block hits ground
+}
 }

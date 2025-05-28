@@ -357,6 +357,7 @@
 "Assets/Scripts/BlockController.cs"
 "Assets/Scripts/BlockSpawner.cs"
 "Assets/Scripts/CameraFollow.cs"
+"Assets/Scripts/DifficultyLevel.cs"
 "Assets/Scripts/GameManager.cs"
 -langversion:9.0
 /deterministic
