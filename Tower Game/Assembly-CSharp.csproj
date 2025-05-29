@@ -65,11 +65,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Scripts/BlockController.cs" />
+    <Compile Include="Assets/Scripts/GameDifficulty.cs" />
+    <Compile Include="Assets/Scripts/LevelSettings.cs" />
     <Compile Include="Assets/Scripts/BlockSpawner.cs" />
+    <Compile Include="Assets/Scripts/LevelManager.cs" />
     <Compile Include="Assets/Scripts/GameManager.cs" />
     <Compile Include="Assets/Scripts/CameraFollow.cs" />
+    <Compile Include="Assets/Scripts/DifficultyMenu.cs" />
     <Compile Include="Assets/Scripts/AudioManager.cs" />
-    <Compile Include="Assets/Scripts/DifficultyLevel.cs" />
+    <Compile Include="Assets/Scripts/WindObstacle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />

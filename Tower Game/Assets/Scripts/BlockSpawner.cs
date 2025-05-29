@@ -68,12 +68,12 @@ public class BlockSpawner : MonoBehaviour
 
     void MoveBlock()
     {
-        float swingAmplitude = 2f; // How far it swings side to side
-        float swingHeight = 0.5f;  // How much the height changes during swing
-        float swingSpeed = 2f;     // How fast it swings
+        var settings = LevelManager.Instance.ActiveSettings;
+        float swingAmplitude = settings.swingAmplitude;
+        float swingHeight = settings.swingHeight;
+        float swingSpeed = settings.swingSpeed;
 
         float time = Time.time * swingSpeed;
-
         float x = Mathf.Sin(time) * swingAmplitude;
         float y = GetSpawnHeight() - Mathf.Cos(time) * swingHeight;
 

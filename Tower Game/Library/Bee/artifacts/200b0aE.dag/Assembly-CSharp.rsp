@@ -357,8 +357,12 @@
 "Assets/Scripts/BlockController.cs"
 "Assets/Scripts/BlockSpawner.cs"
 "Assets/Scripts/CameraFollow.cs"
-"Assets/Scripts/DifficultyLevel.cs"
+"Assets/Scripts/DifficultyMenu.cs"
+"Assets/Scripts/GameDifficulty.cs"
 "Assets/Scripts/GameManager.cs"
+"Assets/Scripts/LevelManager.cs"
+"Assets/Scripts/LevelSettings.cs"
+"Assets/Scripts/WindObstacle.cs"
 -langversion:9.0
 /deterministic
 /optimize+

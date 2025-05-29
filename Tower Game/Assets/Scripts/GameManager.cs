@@ -17,13 +17,20 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void AddScore(int points)
-{
-    score += points;
-    Debug.Log("Score: " + score); // Optional: Keep for debug
-    if (scoreText != null)
-        scoreText.text = "Score: " + score;
-}
+   public void AddScore(int points)
+    {
+        score += points;
+        Debug.Log("Score: " + score);
+
+        if (scoreText != null)
+            scoreText.text = "Score: " + score;
+
+        int targetScore = LevelManager.Instance.ActiveSettings.scoreToWin;
+        if (score >= targetScore)
+        {
+            GameWin(); // Trigger win condition
+        }
+    }
     private bool gameOverTriggered = false;
 
     public void GameOver()
@@ -80,12 +87,34 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(joint);
             }
+
+            Rigidbody rb = block.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.isKinematic = true; // Freeze physics
+            }
         }
+    }
+    
+    private bool gameWon = false;
+
+    public void GameWin()
+    {
+        if (gameOverTriggered || gameWon) return;
+
+        gameWon = true;
+        Debug.Log("🎉 You Win! Final Score: " + score);
+        AudioManager.Instance.PlayWin(); // Optional: you may want a separate win sound
+        BreakAllBlockJoints(); // Freeze blocks like in GameOver
+        // Optional: Display Win UI
+        Invoke(nameof(RestartScene), 2f);
     }
 
 
     public void RegisterBlockHitGround()
-{
-    GameOver();  // Immediately ends the game if a non-first block hits ground
-}
+    {
+        GameOver();  // Immediately ends the game if a non-first block hits ground
+    }
 }

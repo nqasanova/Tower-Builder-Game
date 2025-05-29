@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip backgroundMusic;
     public AudioClip blockDropSound;
     public AudioClip gameOverSound;
+    public AudioClip winSound;
 
     void Awake()
     {
@@ -22,6 +23,16 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void PlayWin()
+    {
+        if (backgroundSource.isPlaying)
+        {
+            backgroundSource.Stop();
+        }
+
+        sfxSource.PlayOneShot(winSound);
     }
 
     void Start()
