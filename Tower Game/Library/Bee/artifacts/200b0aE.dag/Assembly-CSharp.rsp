@@ -362,7 +362,7 @@
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/LevelManager.cs"
 "Assets/Scripts/LevelSettings.cs"
-"Assets/Scripts/WindObstacle.cs"
+"Assets/Scripts/MovingGround.cs"
 -langversion:9.0
 /deterministic
 /optimize+

@@ -5,5 +5,10 @@ public class LevelSettings
     public float swingSpeed;
     public float swingHeight;
     public int scoreToWin;
-    public bool hasWindObstacle;
+
+    public bool hasMovingGround;
+
+    // NEW moving ground config
+    public float groundMoveRange;
+    public float groundMoveSpeed;
 }

@@ -45,12 +45,29 @@ public class GameManager : MonoBehaviour
     }
 
     void Update()
+{
+    if (GetHighestBlockHeight() > 20f)
     {
-        if (GetHighestBlockHeight() > 20f)
-        {
-            GameOver();
-        }
+        GameOver();
     }
+
+    if (AnyBlockHasFallen())
+    {
+        GameOver();
+    }
+}
+
+bool AnyBlockHasFallen()
+{
+    GameObject[] blocks = GameObject.FindGameObjectsWithTag("Stuck");
+    foreach (GameObject block in blocks)
+    {
+        if (block.transform.position.y < -2f) // Adjust as needed
+            return true;
+    }
+    return false;
+}
+
 
     float GetHighestBlockHeight()
     {
